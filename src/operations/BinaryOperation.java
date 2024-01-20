@@ -1,6 +1,11 @@
 package operations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import ordinals.NormalFormat;
+import ordinals.Term;
 
 public abstract class BinaryOperation implements Expression {
     protected final Expression firstExpression;
@@ -12,6 +17,8 @@ public abstract class BinaryOperation implements Expression {
     }
 
     protected abstract String getOperation();
+
+    protected abstract NormalFormat calculate(final NormalFormat left, final NormalFormat right);
 
     @Override
     public boolean specialCommutative() {
@@ -61,12 +68,12 @@ public abstract class BinaryOperation implements Expression {
         return sb.toString();
     }
 
-    protected abstract int calculate(int a, int b);
-
-    protected abstract double calculate(double a, double b);
-
     @Override
     public boolean uniqueCommutative() {
         return false;
+    }
+
+    public NormalFormat evaluate() {
+        return calculate(firstExpression.evaluate(), secondExpression.evaluate());
     }
 }

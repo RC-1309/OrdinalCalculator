@@ -1,5 +1,11 @@
 package operations;
 
+import ordinals.Evaluator;
+import ordinals.NormalFormat;
+import ordinals.Term;
+
+import java.util.List;
+
 public class Pow extends BinaryOperation {
     private static final String OPERATION = "^";
 
@@ -18,13 +24,8 @@ public class Pow extends BinaryOperation {
     }
 
     @Override
-    protected int calculate(int a, int b) {
-        return 0;
-    }
-
-    @Override
-    protected double calculate(double a, double b) {
-        return 0;
+    protected NormalFormat calculate(final NormalFormat left, final NormalFormat right) {
+        return Evaluator.pow(left, right);
     }
 
     @Override

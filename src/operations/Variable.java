@@ -1,5 +1,10 @@
 package operations;
 
+import ordinals.NormalFormat;
+import ordinals.Term;
+
+import java.util.List;
+
 public class Variable implements Expression {
     private final String variable;
 
@@ -48,6 +53,11 @@ public class Variable implements Expression {
     @Override
     public String toMiniString() {
         return toString();
+    }
+
+    @Override
+    public NormalFormat evaluate() {
+        return new NormalFormat(List.of(new Term(new NormalFormat(List.of(new Term(null, 1))), 1)));
     }
 
     @Override

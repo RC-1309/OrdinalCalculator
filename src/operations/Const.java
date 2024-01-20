@@ -1,19 +1,17 @@
 package operations;
 
+import ordinals.NormalFormat;
+import ordinals.Term;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Const implements Expression {
-    private final double value;
-    private final boolean isDouble;
+    private final int value;
 
     public Const(int value) {
         this.value = value;
-        isDouble = false;
-    }
-
-    public Const(double value) {
-        this.value = value;
-        isDouble = true;
     }
 
     @Override
@@ -47,6 +45,11 @@ public class Const implements Expression {
     }
 
     @Override
+    public NormalFormat evaluate() {
+        return new NormalFormat(List.of(new Term(null, value)));
+    }
+
+    @Override
     public boolean getAssociative() {
         return true;
     }
@@ -61,6 +64,6 @@ public class Const implements Expression {
 
     @Override
     public String toString() {
-        return isDouble ? Double.toString(value) : Integer.toString((int) value);
+        return Integer.toString(value);
     }
 }

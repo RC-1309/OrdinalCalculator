@@ -1,5 +1,12 @@
 package operations;
 
+import ordinals.Evaluator;
+import ordinals.NormalFormat;
+import ordinals.Term;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Add extends BinaryOperation {
     private static final String OPERATION = "+";
 
@@ -17,17 +24,12 @@ public class Add extends BinaryOperation {
     }
 
     @Override
-    protected int calculate(int a, int b) {
-        return a + b;
+    protected NormalFormat calculate(final NormalFormat left, final NormalFormat right) {
+        return Evaluator.sum(left, right);
     }
 
     @Override
     public int getPriority() {
         return Priority.getAddPriority();
-    }
-
-    @Override
-    protected double calculate(double a, double b) {
-        return a + b;
     }
 }

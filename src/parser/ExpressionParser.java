@@ -7,7 +7,7 @@ import java.util.List;
 public class ExpressionParser implements TripleParser {
     @Override
     public Expression parse(String expression) {
-        System.err.println(expression);
+//        System.err.println(expression);
         return new Parser(new StringExpression(expression)).parse();
     }
 

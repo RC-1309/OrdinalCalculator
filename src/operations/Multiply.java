@@ -1,5 +1,12 @@
 package operations;
 
+import ordinals.Evaluator;
+import ordinals.NormalFormat;
+import ordinals.Term;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Multiply extends BinaryOperation {
     private static final String OPERATION = "*";
 
@@ -17,17 +24,12 @@ public class Multiply extends BinaryOperation {
     }
 
     @Override
-    protected int calculate(int a, int b) {
-        return a * b;
+    protected NormalFormat calculate(final NormalFormat left, final NormalFormat right) {
+        return Evaluator.mul(left, right);
     }
 
     @Override
     public int getPriority() {
         return Priority.getMultiplyPriority();
-    }
-
-    @Override
-    protected double calculate(double a, double b) {
-        return a * b;
     }
 }

@@ -58,14 +58,15 @@ public class ExpressionParser implements TripleParser {
         }
 
 
-        public static Expression getExpression(String operand, Expression left,
-                                               Expression right) {
-            return switch (operand) {
-                case "+" -> new Add(left, right);
-                case "*" -> new Multiply(left, right);
-                case "^" -> new Pow(left, right);
-                default -> null;
-            };
+        public static Expression getExpression(String operand, Expression left, Expression right) {
+            if ("+".equals(operand)) {
+                return new Add(left, right);
+            } else if ("*".equals(operand)) {
+                return new Multiply(left, right);
+            } else if ("^".equals(operand)) {
+                return new Pow(left, right);
+            }
+            return null;
         }
 
         public Expression allPriority(int priority) {

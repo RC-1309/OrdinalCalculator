@@ -46,7 +46,7 @@ public class Const implements Expression {
 
     @Override
     public NormalFormat evaluate() {
-        return new NormalFormat(List.of(new Term(null, value)));
+        return value == 0 ? null : new NormalFormat(List.of(new Term(null, value)));
     }
 
     @Override

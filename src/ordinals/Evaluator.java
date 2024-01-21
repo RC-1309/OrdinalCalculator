@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Evaluator {
     public static NormalFormat sum(NormalFormat leftForm, NormalFormat rightForm) {
         if (leftForm == null && rightForm == null) {
-            return new NormalFormat(List.of());
+            return null;
         }
         if (leftForm == null) {
             return new NormalFormat(new ArrayList<>(rightForm.getCantorFormat()));
@@ -27,17 +27,28 @@ public class Evaluator {
         } else {
             answer.addAll(right);
         }
+        while (!answer.isEmpty() && answer.get(answer.size() - 1).getConst() == 0) {
+            answer.remove(answer.size() - 1);
+        }
+        if (answer.isEmpty()) {
+            return null;
+        }
         return new NormalFormat(answer);
     }
 
     private static NormalFormat mulTerm(final NormalFormat form, final Term term) {
-        Term first = form.getCantorFormat().get(0);
-        if (first.getConst() == 0 || term.getConst() == 0) {
-            return new NormalFormat(List.of(new Term(null, 0)));
+        if (form == null) {
+            return null;
         }
-        List<Term> answer;
+        Term first = form.getCantorFormat().get(0);
+        List<Term> another = new ArrayList<>(form.getCantorFormat().subList(1, form.getCantorFormat().size()));
+        if (first.getConst() == 0 || term.getConst() == 0) {
+            return null;
+        }
+        List<Term> answer = new ArrayList<>();
         if (term.getDegree() == null) {
-            answer = List.of(new Term(first.getDegree(), first.getConst() * term.getConst()));
+            answer.add(new Term(first.getDegree(), first.getConst() * term.getConst()));
+            answer.addAll(another);
         } else {
             answer = List.of(new Term(sum(first.getDegree(), term.getDegree()),  term.getConst()));
         }
@@ -45,6 +56,9 @@ public class Evaluator {
     }
 
     public static NormalFormat mul(final NormalFormat leftForm, final NormalFormat rightForm) {
+        if (rightForm == null) {
+            return null;
+        }
         List<NormalFormat> normalFormats = new ArrayList<>();
         for (Term t : rightForm.getCantorFormat()) {
             normalFormats.add(mulTerm(leftForm, t));
@@ -65,28 +79,41 @@ public class Evaluator {
     }
 
     private static NormalFormat powTerm(final NormalFormat form, final Term term) {
-        Term first = form.getCantorFormat().get(0);
         if (term.getConst() == 0) {
             return new NormalFormat(List.of(new Term(null, 1)));
         }
+        if (form == null) {
+            return null;
+        }
+        Term first = form.getCantorFormat().get(0);
         NormalFormat answer;
         if (term.getDegree() == null) {
-            answer = powN(form, term.getConst());
-        } else {
-            if (first.getDegree() == null) {
-                if (first.getConst() == 1) {
-                    answer = new NormalFormat(List.of(new Term(null, 1)));
+            return powN(form, term.getConst());
+        }
+        if (first.getDegree() == null) {
+            Term t = new Term(term);
+            if (term.getDegree().getCantorFormat().get(0).getDegree() == null) {
+                if (term.getConst() == 1) {
+                    t = new Term(null, 1);
                 } else {
-                    answer = new NormalFormat(List.of(new Term(new NormalFormat(List.of(new Term(term))), 1)));
+                    t = new Term(new NormalFormat(List.of(new Term(term.getDegree(), term.getConst() - 1))), 1);
                 }
-            } else {
-                answer = new NormalFormat(List.of(new Term(mulTerm(first.getDegree(), term), 1)));
             }
+            if (first.getConst() == 1) {
+                answer = new NormalFormat(List.of(new Term(null, 1)));
+            } else {
+                answer = new NormalFormat(List.of(new Term(new NormalFormat(List.of(new Term(t))), 1)));
+            }
+        } else {
+            answer = new NormalFormat(List.of(new Term(mulTerm(first.getDegree(), term), 1)));
         }
         return answer;
     }
 
     public static NormalFormat pow(final NormalFormat leftForm, final NormalFormat rightForm) {
+        if (rightForm == null) {
+            return new NormalFormat(List.of(new Term(null, 1)));
+        }
         List<NormalFormat> normalFormats = new ArrayList<>();
         for (Term t : rightForm.getCantorFormat()) {
             normalFormats.add(powTerm(leftForm, t));

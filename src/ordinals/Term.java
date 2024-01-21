@@ -12,7 +12,7 @@ public class Term {
     }
 
     public Term(Term term) {
-        degree = new NormalFormat(term.degree);
+        degree = term.degree == null ? null : new NormalFormat(term.degree);
         cnst = term.cnst;
     }
 
